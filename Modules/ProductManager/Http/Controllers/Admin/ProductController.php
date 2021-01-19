@@ -9,7 +9,17 @@ use Modules\ProductManager\Entities\Product;
 use Illuminate\Support\Facades\DB;
 use Modules\ProductManager\Http\Requests\ProductRequest;
 use Modules\CategoriesManager\Entities\Categories;
+use Modules\ProductManager\Entities\ProductImage;
+use Modules\DeviceManager\Entities\Device;
+use Modules\StoragesManager\Entities\Storages;
+use Modules\ModelManager\Entities\Devicemodel;
+use Modules\ColorsManager\Entities\Colors;
 
+use Modules\BrokenDevicesManager\Entities\BrokenDevices;
+use Modules\CarriersManager\Entities\Carriers;
+use Modules\HeadlineOnesManager\Entities\HeadlineOnes;
+use Modules\HeadlineTwosManager\Entities\HeadlineTwos;
+use Modules\HeadlineThreesManager\Entities\HeadlineThrees;
 
 class ProductController extends Controller
 {
@@ -23,15 +33,20 @@ class ProductController extends Controller
         $allowed_columns = ['id', 'item_title', 'phone_purchase_date','phone_condition','selling_price'];
         $sort = in_array($request->get('sort'), $allowed_columns) ? $request->get('sort') : 'id';
         $order = $request->get('direction') === 'desc' ? 'desc' : 'desc';
+        //$products = Product::orderBy('id', 'desc')->paginate(config('get.ADMIN_PAGE_LIMIT'));
 
-
-        $products = Product::status(request('status'))->filter(request('keyword'))->categoryWise(request('category_id'))->orderBy($sort, $order)->with('category')->paginate(config('get.ADMIN_PAGE_LIMIT'));
+        $products = Product::status(request('status'))->filter(request('keyword'))->categoryWise(request('category_id'))->orderBy($sort, $order)->with('category')->with('ProductImages')->with('user')->paginate(config('get.ADMIN_PAGE_LIMIT'));
 
 
         $categories = Categories::orderBy('title', 'asc')->pluck('title', 'id', 'status');
         $categories->prepend('Select Category', "");
 
-        return view('productmanager::admin.index',compact('products','categories'));
+
+        $Devices = Device::orderBy('device_name', 'asc')->pluck('device_name', 'device_name', 'status');
+        $Devices->prepend('Select Device type', "");
+
+
+        return view('productmanager::admin.index',compact('products','categories','Devices'));
     }
 
     /**
@@ -45,9 +60,10 @@ class ProductController extends Controller
         $categories = Categories::orderBy('title', 'asc')->pluck('title', 'id', 'status');
         $categories->prepend('Select Category', "");
 
+        $Devices = Device::orderBy('device_name', 'asc')->pluck('device_name', 'device_name', 'status');
+        $Devices->prepend('Select Device type', "");
 
-
-        return view('productmanager::admin.createOrUpdate',compact('categories'));
+        return view('productmanager::admin.createOrUpdate',compact('categories','Devices'));
     }
 
     /**
@@ -59,42 +75,59 @@ class ProductController extends Controller
     {
 
         $array = collect($request)->except(['_token','product_image'])->all();
-        foreach($request->wight as $key=>$value){
+
+        try{
 
 
-        $array['product_slug'] = $array['item_title'];
-        $array['custom_product_id'] = rand(100000000000 , 999999999999);
+            if($request->file('item_video')){
 
-
-
-            if($request->file('product_image')){
-
-                $file     = $request->file('product_image');
+                $file     = $request->file('item_video');
                 $filename = $file->getClientOriginalName();
 
-                $path = $request->file('product_image')->storeAs(
-                    'public/ProductImages', $filename
+                $path = $request->file('item_video')->storeAs(
+                    'public/ProductVideo', $filename
                     );
-                $array['mainphoto'] = $path;
+                $array['item_video'] = $path;
             }
 
-
             $array['user_id'] = '1';
-            $array['weight'] = $value;
-            $array['final_price'] = $request->final_price[$key];
 
             $insertproduct = Product::create($array);
 
+
+
+
+            if(!empty($request->only(['product_image']))){
+
+                $imgData = $request->file('product_image');
+
+               foreach($imgData as $pimage){
+
+                $path = $pimage->store(
+                    'public/ProductImages'
+                    );
+
+                    $proimag = new productImage();
+                    $proimag->product_image = $path;
+
+                    $insertproduct->ProductImages()->save($proimag);
+
+                    }
+
+
+
+                }
+
+
         }
-
-
-
-
+        catch (\Illuminate\Database\QueryException $e) {
+            return back()->withError($e->getMessage())->withInput();
+        }
         return redirect()->route('admin.product.index')->with('success', 'Product has been saved Successfully');
 
     }
 
-
+   
 
     /**
      * Show the specified resource.
@@ -106,10 +139,12 @@ class ProductController extends Controller
 
 
 
-        $Product = Product::findOrFail($id)->where('id' ,'=', $id)->with('category')->first();
+        $Product = Product::findOrFail($id)->where('id' ,'=', $id)->with('ProductImages')->first();
 
+        $storageName = Storages::where('id',$Product->storage)->first();
+        $Carriername = Carriers::where('id',$Product->carrier_id)->first();
 
-        return view('productmanager::admin.show',compact('Product'));
+        return view('productmanager::admin.show',compact('Product','storageName','Carriername'));
     }
 
     /**

@@ -1,14 +1,12 @@
-
 @extends('layouts.admin.master')
 @section('title','Category')
 @section('content')
 @include('layouts.admin.flash.alert')
-
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Category Manager
-            <small>Here you can manage category</small>
+            Manage Manufacturer
+            <small>Here you can manage Manufacturer</small>
         </h1>
         {{ Breadcrumbs::render('common',['append' => [['label'=> $getController,'route'=> \Request::route()->getName()]]]) }}
     </section>
@@ -37,9 +35,9 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header">
-                            <h3 class="box-title"><span class="caption-subject font-green bold uppercase">{{ __('List Category') }}</span></h3>
+                            <h3 class="box-title"><span class="caption-subject font-green bold uppercase">{{ __('List Manufacturer') }}</span></h3>
                             <div class="box-tools">
-                                <a href="{{route('admin.categories.create')}}" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> Add New Category
+                                <a href="{{route('admin.categories.create')}}" class="btn btn-success btn-flat"><i class="fa fa-plus"></i> Add New Manufacturer
                                 </a>
                             </div>
                         </div><!-- /.box-header -->
@@ -49,9 +47,8 @@
                                     <tr>
                                         <th>#</th>
 
-                                        <th scope="col">Parent Category</th>
-                                        <th scope="col">Sub Category</th>
-                                        <th scope="col">Slug</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Device type</th>
                                         <th scope="col" width="18%">created</th>
                                         <th scope="col" class="actions" width="12%">Action</th>
                                     </tr>
@@ -66,28 +63,8 @@
                                         <tr class="row-{{ $category->id }}">
                                             <td> {{$i}}. </td>
 
-                                            <td>
-                                                @if(!empty($category->parent_id))
-                                                {{ \app\Helpers\BasicHelpers::GetparentCategory($category->parent_id)  }}
-                                                @else
-                                                {{$category->title}}
-                                                @endif
-
-
-                                            </td>
-
-
-
-                                            <td>
-
-                                                 @if(!empty($category->parent_id))
-                                                 {{$category->title}}
-                                                @else
-                                                {{ '--' }}
-                                                @endif
-
-                                            </td>
-                                            <td> {{ $category->slug }}</td>
+                                            <td>{{$category->title}}</td>   
+                                            <td> @if(!empty($category->deviceType->device_name)){{$category->deviceType->device_name}} @else {{ 'N/A' }} @endif</td>
                                             <td>{{ $category->created_at->format(config('get.ADMIN_DATE_TIME_FORMAT')) }}</td>
                                             <td class="actions">
                                                 <div class="form-group">

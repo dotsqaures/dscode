@@ -40,5 +40,16 @@ class RedemStamp extends Model
 
         return $query;
     }
+	
+	
+	 public function user() {
+        return $this->hasOne(\Modules\UserManager\Entities\User::class, 'id','user_id');
+    }
+	
+	
+	 public function stamp() {
+        return $this->hasOne(\Modules\StampsManager\Entities\Stamps::class, 'id','stamp_id');
+    }
+	
 
 }

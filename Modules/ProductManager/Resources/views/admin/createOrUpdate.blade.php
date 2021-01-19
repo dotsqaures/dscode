@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title', !empty($products) ? 'Edit Product' : 'Add Product')
+@section('title', !empty($products) ? 'Edit Listing' : 'Add Listing')
 @section('content')
 @include('layouts.admin.flash.alert')
 
@@ -8,33 +8,33 @@
 
     <section class="content-header">
         <h1>
-            Manage Product
-            <small>Here you can {{ !empty($products) ? 'edit' : 'add' }} Product</small>
+            Manage Listing
+            <small>Here you can {{ !empty($products) ? 'edit' : 'add' }} Listing</small>
         </h1>
-        {{ Breadcrumbs::render('common',['append' => [['label'=> $getController,'route'=> 'admin.product.index'],['label' => !empty($products) ? 'Edit Product' : 'Add Product' ]]]) }}
+        {{ Breadcrumbs::render('common',['append' => [['label'=> $getController,'route'=> 'admin.product.index'],['label' => !empty($products) ? 'Edit Listing' : 'Add Listing' ]]]) }}
     </section>
     <section class="content" data-table="categories">
             <div class="row categories">
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">{{ !empty($products) ? 'Edit Product' : 'Add Product' }} </h3>
+                            <h3 class="box-title">{{ !empty($products) ? 'Edit Listing' : 'Add Listing' }} </h3>
                             <a href="{{ route('admin.product.index') }}" class="btn btn-default pull-right" title="Cancel"><i class="fa fa-fw fa-chevron-circle-left"></i> Back</a>
                         </div><!-- /.box-header -->
 
                 @if(isset($products))
                     {{ Form::model($products, ['route' => ['admin.product.update', $products->id], 'method' => 'patch','enctype'=>'multipart/form-data']) }}
                 @else
-                    {{ Form::open(['route' => 'admin.product.store','enctype'=>'multipart/form-data']) }}
+                    {{ Form::open(['url' => 'admin.product.store','enctype'=>'multipart/form-data']) }}
                 @endif
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
 
 
                             <div class="form-group required {{ $errors->has('category_id') ? 'has-error' : '' }}">
                                 <div class="row">
-                                    <label class="col-md-3 control-label" for="category_id">Category</label>
+                                    <label class="col-md-3 control-label" for="category_id">Manufacturer</label>
                                     <div class="col-md-6">
                                         {{ Form::select('category_id', $categories, old("category_id"), ['class' => 'form-control']) }}
                                         @if($errors->has('category_id'))
@@ -43,6 +43,62 @@
                                     </div>
                                 </div>
                             </div>
+
+
+                            <div class="form-group required {{ $errors->has('device_type') ? 'has-error' : '' }}">
+                                    <div class="row">
+                                        <label class="col-md-3 control-label" for="device_type">Device Type</label>
+                                        <div class="col-md-6">
+                                            {{ Form::select('device_type', $Devices, old("device_type"), ['class' => 'form-control']) }}
+                                            @if($errors->has('device_type'))
+                                            <span class="help-block">{{ $errors->first('device_type') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group required {{ $errors->has('storage') ? 'has-error' : '' }}">
+                                        <div class="row">
+                                            <label class="col-md-3 control-label" for="device_type">Storage</label>
+                                            <div class="col-md-6">
+                                                {{ Form::select('storage', $storage, old("storage"), ['class' => 'form-control']) }}
+                                                @if($errors->has('storage'))
+                                                <span class="help-block">{{ $errors->first('storage') }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group required {{ $errors->has('colour') ? 'has-error' : '' }}">
+                                            <div class="row">
+                                                <label class="col-md-3 control-label" for="device_type">Colour</label>
+                                                <div class="col-md-6">
+                                                    {{ Form::select('colour', $colors, old("colour"), ['class' => 'form-control']) }}
+                                                    @if($errors->has('colour'))
+                                                    <span class="help-block">{{ $errors->first('colour') }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group required {{ $errors->has('carrier_id') ? 'has-error' : '' }}">
+                                                <div class="row">
+                                                    <label class="col-md-3 control-label" for="device_type">Carrier</label>
+                                                    <div class="col-md-6">
+                                                        {{ Form::select('carrier_id', $Carriers, old("carrier_id"), ['class' => 'form-control']) }}
+                                                        @if($errors->has('carrier_id'))
+                                                        <span class="help-block">{{ $errors->first('carrier_id') }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
 
 
 
@@ -71,74 +127,92 @@
 
 
 
-
                         <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                             <label class="control-label" for="last_name">Status</label>
-                        {{ Form::select('status', [1 => 'Active', 0 => 'In-Active'], old("status"), ['class' => 'form-control']) }}
+                        {{ Form::select('status', [2 => 'Rejected',1 => 'Approved', 0 => 'Pending'], old("status"), ['class' => 'form-control']) }}
                        </div>
 
 
- </div>
 
-                        <div class="col-md-12">
-                         <div class="form-group required {{ $errors->has('qty') ? 'has-error' : '' }}">
-                                <label for="title">Quantity</label>
-                                {{ Form::text('qty', old('qty'), ['class' => 'form-control','placeholder' => 'Quantity']) }}
-                                @if($errors->has('qty'))
-                                <span class="help-block">{{ $errors->first('qty') }}</span>
+                  @if(!empty($products->ProductImages))
+                  @foreach ($products->ProductImages as $value)
+                  <a href="javascript:void(0)" onclick="RemoveImage('{{$value->id}}')" class="removeImage{{$value->id}}"><i class="fa fa-times-circle closeicon"></i>
+                  <img src="{{ asset(Storage::url($value->product_image)) }}" style="width:100px; height:100px;"/>
+                  </a>
+                  @endforeach
+                  @endif
+
+
+                  <div class="form-group">
+                     <label for="description">Product Images</label>
+                     <input multiple="multiple" name="product_image[]" type="file">
+                  </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+
+
+
+                         <div class="form-group required {{ $errors->has('selling_price') ? 'has-error' : '' }}">
+                                <label for="title">Selling price($)</label>
+                                {{ Form::text('selling_price', old('selling_price'), ['class' => 'form-control','placeholder' => 'Selling Price']) }}
+                                @if($errors->has('selling_price'))
+                                <span class="help-block">{{ $errors->first('selling_price') }}</span>
                                 @endif
-                          </div>
+                              </div>
+
+                              <div class="form-group required {{ $errors->has('shipping_charge') ? 'has-error' : '' }}">
+                                    <label for="title">Shipping charge($)</label>
+                                    {{ Form::text('shipping_charge', old('shipping_charge'), ['class' => 'form-control','placeholder' => 'Shipping Charge']) }}
+                                    @if($errors->has('shipping_charge'))
+                                    <span class="help-block">{{ $errors->first('shipping_charge') }}</span>
+                                    @endif
+                                  </div>
 
 
-               </div>
+
+                          <div class="form-group required {{ $errors->has('final_price') ? 'has-error' : '' }}">
+                                        <label for="title">Final price($)</label>
+                                        {{ Form::text('final_price', old('final_price'), ['class' => 'form-control','placeholder' => 'Final Price']) }}
+                                        @if($errors->has('final_price'))
+                                        <span class="help-block">{{ $errors->first('final_price') }}</span>
+                                        @endif
+                            </div>
 
 
 
-               <div class="col-md-12 adddiv">
 
 
-                <div class="col-md-4">
-                <div class="form-group required {{ $errors->has('wight') ? 'has-error' : '' }}">
-                    <label for="title">Weight</label>
-                    {{ Form::text('wight[]', null, ['class' => 'form-control','placeholder' => 'Weight']) }}
-                    @if($errors->has('wight'))
-                    <span class="help-block">{{ $errors->first('wight') }}</span>
-                    @endif
-                </div>
-                </div>
-                <div class="col-md-4">
 
-                  <div class="form-group required {{ $errors->has('final_price') ? 'has-error' : '' }}">
-                                <label for="title">Final price($)</label>
-                                {{ Form::text('final_price[]', null, ['class' => 'form-control','placeholder' => 'Final Price']) }}
-                                @if($errors->has('final_price'))
-                                <span class="help-block">{{ $errors->first('final_price') }}</span>
-                                @endif
-                    </div>
-                </div>
+                      <div class="form-group {{ $errors->has('is_price_negotiable') ? 'has-error' : '' }}">
+                            <label class="control-label" for="last_name">Is Price Negotiable</label>
+                       {{ Form::select('is_price_negotiable', [1 => 'Yes', 0 => 'No'], old("is_price_negotiable"), ['class' => 'form-control']) }}
+                      </div>
 
-                </div>
 
-                <div class="add-more-row"></div>
 
-                <div class="col-md-2">
-                    <div class="form-group change">
-                        <label for="">&nbsp;</label><br/>
-                        <a class="btn btn-success add-more">+ Add More</a>
-                    </div>
-                </div>
+  <!--<div class="form-group">
+                            <label for="description">Product Video</label>
 
-                <br/>
+                            <input  name="item_video" type="file">
+                        </div>-->
 
-               <div class="col-md-6">
-               <div class="form-group">
-                <label for="description">Product Image</label>
-                <input multiple="multiple" name="product_image" type="file">
-             </div>
-            </div>
+
+
+                        </div>
+
+
                     </div> <!-- /.row -->
 
-
+                    <div class="row">
+                        @if(!empty($products))
+                            <input id="input-1" name="star_ratting" class="rating rating-loading" data-min="0" data-max="5" data-step="0.1" value="{{ $products->star_ratting }}" data-size="xs" >
+                            @else
+                            <input id="input-1" name="star_ratting" class="rating rating-loading" data-min="0" data-max="5" data-step="0.1" value="" data-size="xs" >
+                            @endif
+                    </div>
 
 
                 </div><!-- /.box-body -->
@@ -177,14 +251,9 @@
 
 <script>
 
-    $(document).ready(function() {
-        $(".add-more").click(function(){
-            var html = $(".adddiv").html();
-            $(".add-more-row").append(html);
-        });
-
-
-    });
+        /*$('.datepicker').datepicker({
+         startDate: '-3d'
+        });*/
 
         $(function() {
             $('#datetimepicker1').datepicker();

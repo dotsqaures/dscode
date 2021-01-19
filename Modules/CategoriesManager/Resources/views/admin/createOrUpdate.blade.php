@@ -5,8 +5,8 @@
     <!-- Content Header (category header) -->
     <section class="content-header">
         <h1>
-            Manage Catgeory
-            <small>Here you can {{ !empty($category) ? 'edit' : 'add' }} Catgeory</small>
+            Manage Manufacturer
+            <small>Here you can {{ !empty($category) ? 'edit' : 'add' }} Manufacturer</small>
         </h1>
         {{ Breadcrumbs::render('common',['append' => [['label'=> $getController,'route'=> 'admin.categories.index'],['label' => !empty($category) ? 'Edit Category' : 'Add Category' ]]]) }}
     </section>
@@ -15,7 +15,7 @@
                 <div class="col-md-12">
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">{{ !empty($category) ? 'Edit Catgeory' : 'Add Catgeory' }} </h3>
+                            <h3 class="box-title">{{ !empty($category) ? 'Edit Manufacturer' : 'Add Manufacturer' }} </h3>
                             <a href="{{ route('admin.categories.index') }}" class="btn btn-default pull-right" title="Back"><i class="fa fa-fw fa-chevron-circle-left"></i> Back</a>
                         </div><!-- /.box-header -->
 
@@ -28,10 +28,17 @@
                     <div class="row">
                         <div class="col-md-6">
 
-                            <div class="form-group {{ $errors->has('parent_id') ? 'has-error' : '' }}">
-                                <label class="control-label" for="last_name">Parent Category</label>
-                                        {{ Form::select('parent_id', $Parentcategories, old("parent_id"), ['class' => 'form-control']) }}
-                           </div>
+                            <div class="form-group required {{ $errors->has('device_id') ? 'has-error' : '' }}">
+                                    <div class="row">
+                                        <label class="col-md-3 control-label" for="device_type">Device Type</label>
+                                        <div class="col-md-6">
+                                            {{ Form::select('device_id', $device, old("device_id"), ['class' => 'form-control']) }}
+                                            @if($errors->has('device_id'))
+                                            <span class="help-block">{{ $errors->first('device_id') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
 
                               <div class="form-group required {{ $errors->has('title') ? 'has-error' : '' }}">
                                 <label for="title">Title</label>
@@ -54,7 +61,7 @@
                                             {{ Form::select('status', [1 => 'Active', 0 => 'Inactive'], old("status"), ['class' => 'form-control']) }}
                           </div>
 
-
+                        
 
                         </div>
 

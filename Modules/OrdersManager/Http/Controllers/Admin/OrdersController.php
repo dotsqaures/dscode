@@ -89,7 +89,7 @@ class OrdersController extends Controller {
 
         $Userlist = User::where('role_id',1)->get();
 
-        if(!empty($request->user_id) && !empty($request->desciption)){
+        if(!empty($request->user_id)){
         foreach($request->user_id as $val){
 
             $userdata = User::where('id',$val)->first();

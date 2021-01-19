@@ -82,20 +82,9 @@ class RestaurentsController extends Controller
 
                 $restuarantTimeArray = array();
 
-                if($value == 'Monday'){
+                if($value == 'Monday - Friday'){
                     $indexs = 0;
-                }elseif($value == 'Tuesday'){
-                    $indexs = 1;
-                }elseif($value == 'Wednesday'){
-                    $indexs = 2;
-                }elseif($value == 'Thursday'){
-                    $indexs = 3;
-                }elseif($value == 'Friday'){
-                    $indexs = 4;
-                }elseif($value == 'Saturday'){
-                    $indexs = 5;
-                }else{
-                    $indexs = 6;
+                
                 }
 
 
@@ -216,20 +205,9 @@ class RestaurentsController extends Controller
 
                 $restuarantTimeArray = array();
 
-                if($value == 'Monday'){
+                if($value == 'Monday - Friday'){
                     $indexs = 0;
-                }elseif($value == 'Tuesday'){
-                    $indexs = 1;
-                }elseif($value == 'Wednesday'){
-                    $indexs = 2;
-                }elseif($value == 'Thursday'){
-                    $indexs = 3;
-                }elseif($value == 'Friday'){
-                    $indexs = 4;
-                }elseif($value == 'Saturday'){
-                    $indexs = 5;
-                }else{
-                    $indexs = 6;
+                
                 }
 
 

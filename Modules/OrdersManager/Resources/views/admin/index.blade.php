@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title','Invoice Manager')
+@section('title','Order Manager')
 @section('content')
 @include('layouts.admin.flash.alert')
     <!-- Content Header (Page header) -->
@@ -18,8 +18,8 @@
 </style>
     <section class="content-header">
         <h1>
-            Invoice List
-            <small>Here you can manage Invoice</small>
+            Sale List
+            <small>Here you can manage Sale</small>
         </h1>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/admin/dashboard') }}">
@@ -27,7 +27,7 @@
                 Home</a></li>
 
             <li class="breadcrumb-item active">
-                Invoice List
+                    Sale List
 </li>
 
 </ol>
@@ -75,18 +75,18 @@
                             </div>
                         {{ Form::close() }}
 			<div class="tab-pane active">
-                            <table class="table table-hover table-striped table-bordered" id="demo">
+                            <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
 
+
+                                        <th scope="col"><a href="javascript:void(0)">Stamp Name</a></th>
+                                        <th scope="col"><a href="javascript:void(0)">Price</a></th>
+                                         <th scope="col"><a href="javascript:void(0)">Total Stamp</a></th>
+                                          <th scope="col"><a href="javascript:void(0)">Remaining Stamp</a></th>
+                                        <th scope="col"><a href="javascript:void(0)">User Name</a></th>
                                         <th scope="col"><a href="javascript:void(0)">Transcation id</a></th>
-                                        <th scope="col"><a href="javascript:void(0)">Product Name</a></th>
-                                        <th scope="col"><a href="javascript:void(0)">Size</a></th>
-                                         <th scope="col"><a href="javascript:void(0)">Qty</a></th>
-                                          <th scope="col"><a href="javascript:void(0)">Price</a></th>
-
-
                                         <th scope="col">
 
                                          <a href="javascript:void(0)">Date</a></th>
@@ -110,37 +110,46 @@
                                             <td> {{$i}}. </td>
 
 
-
-                                            <td>{{ 'tx' }}</td>
-
-
-
-                                            <td>{{ 'Gold Ring' }}</td>
-
+                                            @if(!empty($stampdata))
+                                            <td>{{ $stampdata->title }}</td>
+                                            @else
+                                            <td>{{ "N/A" }}</td>
+                                            @endif
 
 
-
-                                            <td>{{ '10gm' }}</td>
+                                            <td>{{ $order->total_amount }}</td>
 
 
 
 
-
-                                            <td>{{ "1" }}</td>
-
-
-
-                                            <td>{{ "200" }}</td>
+                                            <td>{{ $stampdata->stemp_no }}</td>
 
 
 
 
+                                            @if(!empty($stampdata))
+                                            <td>{{ $stampdata->stemp_no - count($totalRedemStamp)   }}</td>
+                                            @else
+                                            <td>{{ "N/A" }}</td>
+                                            @endif
+
+                                            @if(!empty($userdata))
+                                            <td>{{  $userdata->first_name }}</td>
+                                            @else
+                                            <td>{{ "N/A" }}</td>
+                                            @endif
+
+                                            <td>{{ $order->transcation_id }}</td>
 
 
-                                            <td>{{ '05/01/2021' }}</td>
+
+                                            <td>{{ date('m/d/Y',strtotime($order->order_date)) }}</td>
                                             <td class="actions">
                                                 <div class="form-group">
-                                                    <a href="javascript:void()" class="btn btn-default pull-left" onclick="printDiv()">Print Invoice</a>
+                                                     {{-- <a href="{{ route('admin.Orders.show',['id' => $order->id]) }}" class="btn btn-warning btn-sm btn-flat" data-toggle="tooltip" alt="View setting" title="" data-original-title="View"><i class="fa fa-fw fa-eye"></i></a>
+                                                    <a href="{{ route('admin.Order.edit',['id' => $order->id]) }}" class="btn btn-primary btn-sm btn-flat" data-toggle="tooltip" alt="Edit" title="" data-original-title="Edit"><i class="fa fa-edit"></i></a>--}}
+                                                    <a href="javascript:void(0);" class="confirmDeleteBtn btn btn-danger btn-sm btn-flat" data-toggle="tooltip" alt="Delete {{ $order->id }}" data-url="{{ route('admin.Orders.destroy', $order->id) }}" data-original-title="Delete"><i class="fa fa-trash"></i></a>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -189,20 +198,5 @@
                 changeYear: true,
                 maxDate: '0' });
           });
-
-          function printDiv(){
-            var divToPrint=document.getElementById('demo');
-
-            var newWin=window.open('','Print-Window');
-
-            newWin.document.open();
-
-
-            newWin.document.write('<html><body onload="window.print()" style="font-size:11px; font-weight:bold; color:#000000;">'+divToPrint.innerHTML+'</body></html>');
-
-            newWin.document.close();
-
-            setTimeout(function(){newWin.close();},10);
-        }
 </script>
 

@@ -1,38 +1,18 @@
 <?php
 namespace App\Helpers;
+
 use Illuminate\Support\Facades\DB;
 use Auth;
 class BasicHelpers
 {
-
     /**
      * getStingWithEmoji
      * @return String
      */
 
 
-
-
-    public static function GetparentCategory($id)
-    {
-        $subMenu = DB::table('categories')->where([['id',$id],['status','1']])->first();
-        if($subMenu)
-        {
-            return $subMenu->title;
-        }else{
-            return '';
-        }
-
-
-    }
-
-
-    public static function SubMenuNav($device_id)
-    {
-        $subMenu = DB::table('devicemodels')->where([['device_id',$device_id],['status','1']])->get();
-
-       return $subMenu;
-    }
+    /* get product type */
+    
 
 
 
@@ -41,15 +21,8 @@ class BasicHelpers
 
 
 
-    public static function CountUnreadMessageforSeller($productid,$receiverid,$senderid)
-    {
-
-        $totalUnreadMessage = DB::table('chats')->where([['sender_id','=',$senderid],['receiver_id','=',$receiverid],['product_id','=',$productid],['status','=',0]])->get();
-
-        return count($totalUnreadMessage);
-    }
-
-
+  
+  
 
     public static function UserInfo($userid)
     {

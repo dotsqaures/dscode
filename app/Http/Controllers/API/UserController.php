@@ -26,6 +26,7 @@ use Modules\ProductManager\Entities\Chat;
 use Modules\UserManager\Entities\UserAddressBook;
 use Modules\RestaurentsManager\Entities\Restaurents;
 use Modules\RestaurentsManager\Entities\RestaurentTimes;
+use Exception;
 
 
 class UserController extends Controller
@@ -638,7 +639,7 @@ class UserController extends Controller
 
     public function stamp_list(Request $request){
 
-        $stamplist = Stamps::where([['status',1],['is_deleted',0],['is_free',0]])->paginate(20);
+        $stamplist = Stamps::where([['status',1],['is_deleted',0],['is_free',0]])->orderby('created_at','DESC')->paginate(20);
 
 
         $productarray  = array();
@@ -955,6 +956,127 @@ if($pro->stemp_valid  ==  '1 Months') {
 
 
 
+ }
+ 
+ public function add_card(Request $request)
+	{
+        $userdata = User::where('id','=',$request->user_id)->first();	
+        \Stripe\Stripe::setApiKey('sk_live_bxJZgmxasb0tjRykxB0HkOH6003sDGDgJm');
+            
+           
+
+            
+
+			try{
+				
+			 $stripetoken =  \Stripe\Token::create([
+                'card' => [
+                  'number' => $request->card_number,
+                  'exp_month' => $request->exp_month,
+                  'exp_year' => $request->exp_year,
+                  'cvc' => $request->cvc,
+                ],
+              ]);
+			  
+			  $updatecard = \Stripe\Customer::createSource(
+				$userdata->stripe_account_id,
+			   ['source' => $stripetoken->id]
+			  );
+			  
+			  return response([
+				'message'   => trans('Card Added Successfully.'),
+				//'status'   => true,
+				'status' => 200,
+				
+
+
+
+			]);
+			
+			}catch(\Stripe\Error\Card $e){
+				
+				return response([
+				'message'   => 'card decline from stripe',
+				//'status'   => true,
+				'status' => 400,
+				
+
+
+
+			]);
+			}
+
+		   
+
+	}
+	
+public function delete_card(Request $request){
+	   $userdata = User::where('id','=',$request->user_id)->first();	
+      \Stripe\Stripe::setApiKey('sk_live_bxJZgmxasb0tjRykxB0HkOH6003sDGDgJm');
+	  
+	  try{
+	   \Stripe\Customer::deleteSource(
+		  $userdata->stripe_account_id,
+		  $request->card_id,
+		  []
+		);
+		
+		return response([
+				'message'   => 'card deleted',
+				//'status'   => true,
+				'status' => 200,
+				]);
+		
+		
+	  }catch(Exception $e){
+		return response([
+				'message'   => 'Card is not exist, please try again',
+				//'status'   => true,
+				'status' => 400,
+				]);
+		
+		  
+	  }
+		
+			
+}	
+	
+ 
+  public function get_card_list(Request $request){
+	
+    $userdata = User::where('id','=',$request->user_id)->first();	
+     \Stripe\Stripe::setApiKey('sk_live_bxJZgmxasb0tjRykxB0HkOH6003sDGDgJm');
+	 
+	
+    $cardlist = \Stripe\Customer::allSources(
+		  $userdata->stripe_account_id,
+		  ['object' => 'card', 'limit' => 5]
+		);	 
+	
+	 if(count($cardlist) > 0){
+		  return response([
+				'message'   => trans('Data Redem Successfully.'),
+				//'status'   => true,
+				'status' => 200,
+				'data'=>   $cardlist,
+
+
+
+			]);
+	 }else{
+		
+		 return response([
+				'message'   => trans('Not Found.'),
+				//'status'   => true,
+				'status' => 400,
+
+
+
+			]);
+	
+	 }
+	 
+	 
  }
 
 
@@ -1348,7 +1470,7 @@ sk_test_GIXHEBmsSFZj5UtDkjQdPzsP007rjpX8KB
  public function mystamp_list(Request $request){
 
 
-   $stampData =  Order::where([['user_id',$request->user_id],['transcation_id','!=','']])->get();
+   $stampData =  Order::where([['user_id',$request->user_id],['transcation_id','!=','']])->orderBy('created_at','DESC')->get();
 
  if(count($stampData)>0){
 
@@ -1380,6 +1502,7 @@ if(count($stamplist)>0){
             $send['updated_at'] = $pro->updated_at;
             $send['total_redem'] = $totalRedem;
             $send['order_id'] = (int)$stamp->id;
+			$send['order_date'] = $stamp->created_at;
 
             array_push($productarray,$send);
      }
@@ -1428,6 +1551,126 @@ if(count($stamplist)>0){
  }
 
  }
+ 
+public function mystamppurchase_list(Request $request){
+
+
+   $stampData =  Order::where([['user_id',$request->user_id],['transcation_id','!=','']])->orderBy('created_at','DESC')->get();
+
+ if(count($stampData)>0){
+
+    $productarray  = array();
+
+    foreach($stampData as $stamp){
+//$stamp->charge_id;
+    $stamplist = Stamps::where('id',$stamp->charge_id)->get();
+if(count($stamplist)>0){
+    $totalRedem = RedemStamp::where('order_id',$stamp->id)->count();
+
+ foreach($stamplist as $pro){
+     
+            $send = array();
+
+            $send['id'] = $pro->id;
+            $send['title'] = $pro->title;
+            $send['short_description'] = $pro->short_description;
+            $send['description'] = $pro->description;
+            $send['stemp_no'] = $pro->stemp_no;
+            $send['stemp_valid'] = $pro->stemp_valid;
+
+            $send['normal_price'] = $pro->normal_price;
+            $send['descoun_price'] = $pro->descoun_price;
+            $send['saving_price'] = $pro->saving_price;
+            $send['stamp_picture'] = asset(Storage::url($pro->stamp_picture));
+            $send['status'] = $pro->status;
+            $send['created_at'] = $pro->created_at;
+            $send['updated_at'] = $pro->updated_at;
+            $send['total_redem'] = $totalRedem;
+            $send['order_id'] = (int)$stamp->id;
+			$send['order_date'] = $stamp->created_at;
+
+            array_push($productarray,$send);
+     
+
+        }
+
+
+    }
+
+
+
+
+    }
+
+
+        $total = count($productarray);
+
+        $perPage = 30;
+
+        $currentPage = 1;
+
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator($productarray, $total, $perPage, $currentPage);
+
+
+        return response([
+            'message'   => trans('success.'),
+            //'status'   => true,
+            'status' => 200,
+            'data' => $paginator
+
+        ]);
+
+
+ }else{
+
+    return response([
+        'message'   => trans('Ingen stamkort fundet'),
+        //'status'   => true,
+        'status' => 400,
+
+
+
+    ]);
+
+
+ }
+
+ }
+ 
+  
+ 
+ 
+ 
+ public function get_redeem_stamp_list(Request $request){
+	
+    $stampData = RedemStamp::where([['user_id',$request->user_id]])->orderBy('created_at','DESC')->with('user','stamp')->paginate(100);	
+	 
+	 if(count($stampData) > 0){
+		  return response([
+				'message'   => trans('Data Redem Successfully.'),
+				//'status'   => true,
+				'status' => 200,
+				'data'=>   $stampData,
+
+
+
+			]);
+	 }else{
+		
+		 return response([
+				'message'   => trans('Not Found.'),
+				//'status'   => true,
+				'status' => 400,
+
+
+
+			]);
+	
+	 }
+	 
+	 
+ }
+ 
 
 
  public function redeem_stamp(Request $request){
@@ -1509,8 +1752,19 @@ if(count($stamplist)>0){
 
 
  public function restaurantlist(Request $request){
-
-   $restuarentData =  Restaurents::with('restaurantTime')->where('status',1)->get();
+ 
+   //$restuarentData =  Restaurents::with('restaurantTime')->where('status',1)->get();
+   $latitude = $request->Latitude;
+   $longitude = $request->Longitude;
+   
+   $restuarentData = Restaurents::select(DB::raw('*, ( 6367 * acos( cos( radians('.$latitude.') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin( radians( lat ) ) ) ) AS distance'))
+    //->having('distance', '<', 10000000000000)
+    ->orderBy('distance')
+    ->with('restaurantTime')->get();
+   
+  
+   
+    
 
     return response([
         'message'   => trans('Restaurant Data.'),

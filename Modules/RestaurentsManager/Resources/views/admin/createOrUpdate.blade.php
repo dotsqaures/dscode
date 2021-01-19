@@ -137,6 +137,14 @@ border: none;
                                 </div>
                             </div>
 
+                             <div class="form-group {{ $errors->has('open_all_time') ? 'has-error' : '' }}">
+                                <div class="row">
+                                    <label class="col-md-3 control-label" for="last_name">Open All Time</label>
+                                    <div class="col-md-6">
+                                        {{ Form::text('open_all_time', old('open_all_time'), ['class' => 'form-control','placeholder' => 'Open All Time']) }}
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <div class="row">
@@ -169,10 +177,10 @@ border: none;
 
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-md-1 control-label" for="last_name">Monday</label>
+                                    <label class="col-md-1 control-label" for="last_name">Monday - Friday</label>
 
                                     <div class="col-md-2">
-                                        <input  name="day[]" type="checkbox" value="Monday">
+                                        <input  name="day[]" type="checkbox" value="Monday - Friday">
                                     </div>
 
                                     <div class="col-md-2">
@@ -198,10 +206,10 @@ border: none;
 
                             <div class="form-group">
                                 <div class="row">
-                                    <label class="col-md-1 control-label" for="last_name">Tuesday</label>
+                                    <label class="col-md-1 control-label" for="last_name">Weekend</label>
 
                                     <div class="col-md-2">
-                                        <input  name="day[]" type="checkbox" value="Tuesday">
+                                        <input  name="day[]" type="checkbox" value="Weekend">
                                     </div>
 
 
@@ -227,121 +235,15 @@ border: none;
 
 
 
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-md-1 control-label" for="last_name">Wednesday</label>
-
-                                    <div class="col-md-2">
-                                        <input  name="day[]" type="checkbox" value="Wednesday">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_open_time[]', null, ['class' => 'form-control timepicker8','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_close_time[]', null, ['class' => 'form-control timepicker9','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_open_time[]', null, ['class' => 'form-control timepicker10','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_close_time[]', null, ['class' => 'form-control timepicker11','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                </div>
-                            </div>
+                           
 
 
 
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-md-1 control-label" for="last_name">Thursday</label>
 
-                                    <div class="col-md-2">
-                                        <input  name="day[]" type="checkbox" value="Thursday">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_open_time[]', null, ['class' => 'form-control timepicker12','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_close_time[]', null, ['class' => 'form-control timepicker13','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
+                           
 
 
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_open_time[]', null, ['class' => 'form-control timepicker14','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_close_time[]', null, ['class' => 'form-control timepicker15','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-md-1 control-label" for="last_name">Friday</label>
-
-                                    <div class="col-md-2">
-                                        <input  name="day[]" type="checkbox" value="Friday">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_open_time[]', null, ['class' => 'form-control timepicker16','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_close_time[]', null, ['class' => 'form-control timepicker17','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_open_time[]', null, ['class' => 'form-control timepicker18','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_close_time[]', null, ['class' => 'form-control timepicker19','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-md-1 control-label" for="last_name">Saturday</label>
-
-                                    <div class="col-md-2">
-                                        <input  name="day[]" type="checkbox" value="Saturday">
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_open_time[]', null, ['class' => 'form-control timepicker20','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('morning_close_time[]', null, ['class' => 'form-control timepicker21','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_open_time[]', null, ['class' => 'form-control timepicker22','placeholder' => 'Open Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        {{ Form::text('evening_close_time[]', null, ['class' => 'form-control timepicker23','placeholder' => 'Close Time','autocomplete'=>'off']) }}
-                                    </div>
-
-                                </div>
-                            </div>
+                        
 
 
 
@@ -379,15 +281,15 @@ border: none;
 for (i = 1; i < 25; i++) {
 
     $('.timepicker'+i).timepicker({
-        timeFormat: 'h:mm p',
-        interval: 60,
-        minTime: '10',
-        maxTime: '11:00pm',
-        defaultTime: '',
-        startTime: '10:00',
-        dynamic: false,
-        dropdown: true,
-        scrollbar: false
+       
+      timeFormat: 'HH:mm',
+        minTime: '01', // 11:45:00 AM,
+        maxHour: 24,
+        maxMinutes: 30,
+       
+        interval: 30 // 15 minutes
+       
+       
     });
 
 }

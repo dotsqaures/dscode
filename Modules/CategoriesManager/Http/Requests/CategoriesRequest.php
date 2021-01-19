@@ -14,10 +14,10 @@ class CategoriesRequest extends FormRequest
      */
     public function rules(Request $request)
     {
-
+    
         return [
             'title' => 'required|min:2|max:100|unique:categories',
-            //'device_id' => 'required',
+            'device_id' => 'required',
             'status' => 'required',
             'meta_title' => 'required',
             'meta_keyword' => 'required',
@@ -35,7 +35,7 @@ class CategoriesRequest extends FormRequest
     {
         return [
             'title.required'  => 'Menufacturer Title is required field.',
-            //'device_id.required' => 'Please select device type',
+            'device_id.required' => 'Please select device type',
             //'slug.unique' => 'Each category must have a unique slug! this category slug already created!!',
             'meta_title.required'  => 'Please enter meta title.',
             'meta_keyword.required'  => 'Please enter meta keyword.',

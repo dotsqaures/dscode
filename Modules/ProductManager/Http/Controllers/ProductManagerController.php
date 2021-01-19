@@ -166,8 +166,8 @@ class ProductManagerController extends Controller
     {   $logInedUser=\Auth::user();
 
         //$response = User::RetriveAccountOnStripe($logInedUser);
-
-
+       
+       
 
 //        if(empty($response['data']['business_type']))
         if(empty($logInedUser->paypal_email))
@@ -221,9 +221,9 @@ class ProductManagerController extends Controller
         }
 
     }
-
+    
      /**
-     *
+     * 
      * @param Request $request
      */
     public function addPaypalDetails(Request $request){
@@ -346,7 +346,7 @@ class ProductManagerController extends Controller
 
             foreach($request->all() as $key => $value) {
 
-                  if($request->file($key)){
+            if($request->file($key)){
 
                         $file     = $request->file($key);
                         $filename = $file->getClientOriginalName();

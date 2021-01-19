@@ -12,7 +12,7 @@ class Categories extends Model
     use Sluggable; // Attach the Sluggable trait to the model
 
 
-    protected $fillable = ['title','parent_id', 'slug',  'meta_title', 'meta_keyword', 'meta_description', 'status','image'];
+    protected $fillable = ['title','device_id', 'slug',  'meta_title', 'meta_keyword', 'meta_description', 'status','image'];
    // protected $fillable = [];
 
 

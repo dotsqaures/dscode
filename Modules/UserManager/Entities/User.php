@@ -349,7 +349,7 @@ class User extends Authenticatable
         return $customer->id;
 
     }else{
-        return '';
+        return '1';
 
     }
 
@@ -357,7 +357,9 @@ class User extends Authenticatable
 
 public static function CreateCustomerOnStripedemo($request)
  {
-    \Stripe\Stripe::setApiKey('sk_test_51GprTaJ6sT2LBGdySqiYTJbpZnAsKqKqSELfFyl01z8AC4x9WowhbgahM2YJDk9pdv7BQIGlwzuCVJPmKVv79j6i00eHv5jpEk');
+	 // change by satyendra for testing - add live key
+	 \Stripe\Stripe::setApiKey('sk_live_bxJZgmxasb0tjRykxB0HkOH6003sDGDgJm');
+    //\Stripe\Stripe::setApiKey('sk_test_51GprTaJ6sT2LBGdySqiYTJbpZnAsKqKqSELfFyl01z8AC4x9WowhbgahM2YJDk9pdv7BQIGlwzuCVJPmKVv79j6i00eHv5jpEk');
      try{
         $customer = \Stripe\Customer::create(array(
             'email' => $request['email']

@@ -11,7 +11,6 @@ class ProductRequest extends FormRequest
      *
      * @return array
      */
-
     public function rules()
     {
 
@@ -22,13 +21,42 @@ class ProductRequest extends FormRequest
                 return [
                     'item_title' => 'required',
                     'category_id' => 'required',
+                    'device_type' => 'required',
+                     'device_model' => 'required',
+                     'colour' =>'required',
+                     'storage' =>'required',
+                     'carrier_id' =>'required',
+                    // 'imei_code' => 'required |min:15|max:15',
 
 
+                     'product_tag_one' => 'required',
+                     'product_tag_two' => 'required',
+                     'product_tag_three' => 'required',
+
+                    //'upload_verification_photo' => 'required|image|mimes:jpeg,png,jpg',
+                     'status' => 'required',
                      'item_description' => 'required',
 
+                     'shipping_charge' => 'required',
+                     'selling_price' => 'required|numeric',
+                     'termcondition' =>'accepted',
+
+                     'imei_number_photo' => 'nullable|image|mimes:jpeg,png,jpg',
+                     'google_id_photo' => 'nullable|image|mimes:jpeg,png,jpg',
 
                      'mainphoto' => 'nullable|image|mimes:jpeg,png,jpg',
+                     'backphoto' => 'nullable|image|mimes:jpeg,png,jpg',
 
+                     'leftphoto' => 'nullable|image|mimes:jpeg,png,jpg',
+                     'rightphoto' => 'nullable|image|mimes:jpeg,png,jpg',
+
+                     'topphoto' => 'nullable|image|mimes:jpeg,png,jpg',
+                     'bottomphoto' => 'nullable|image|mimes:jpeg,png,jpg',
+
+                     'scratchphoto' => 'nullable|image|mimes:jpeg,png,jpg',
+                     'scratchphoto2' => 'nullable|image|mimes:jpeg,png,jpg',
+
+                     'allaccessories'=>'nullable|image|mimes:jpeg,png,jpg',
 
 
                      //'product_image'=> 'image|mimes:jpeg,png,jpg',

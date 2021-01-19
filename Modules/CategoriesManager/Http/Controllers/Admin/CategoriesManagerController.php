@@ -1,7 +1,7 @@
 <?php
 
 namespace Modules\CategoriesManager\Http\Controllers\admin;
-use App\Helpers\BasicHelpers;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -9,7 +9,6 @@ use Modules\DeviceManager\Entities\Device;
 use Modules\CategoriesManager\Entities\Categories;
 use Illuminate\Support\Facades\DB;
 use Modules\CategoriesManager\Http\Requests\CategoriesRequest;
-
 
 class CategoriesManagerController extends Controller
 {
@@ -23,9 +22,9 @@ class CategoriesManagerController extends Controller
         $allowed_columns = ['id', 'title', 'slug'];
         $sort = in_array($request->get('sort'), $allowed_columns) ? $request->get('sort') : 'slug';
         $order = $request->get('direction') === 'asc' ? 'asc' : 'asc';
-        //$categories = Categories::orderBy('title', 'desc')->get();
+        //$categories = Categories::orderBy('title', 'desc')->paginate(config('get.ADMIN_PAGE_LIMIT'));
 
-        $categories = Categories::status(request('status'))->filter(request('keyword'))->orderBy($sort, $order)->paginate(config('get.ADMIN_PAGE_LIMIT'));
+        $categories = Categories::status(request('status'))->with('deviceType')->filter(request('keyword'))->orderBy($sort, $order)->paginate(config('get.ADMIN_PAGE_LIMIT'));
 
         return view('categoriesmanager::admin.index', compact('categories'));
 
@@ -37,11 +36,10 @@ class CategoriesManagerController extends Controller
      */
     public function create()
     {
-        $device = [];
-        $Parentcategories = Categories::orderBy('title', 'DESC')->pluck('title', 'id');
-        $Parentcategories->prepend('Select Parent Category', "");
+        $device = Device::orderBy('device_name', 'asc')->pluck('device_name', 'id', 'status');
+        $device->prepend('Select Device Type', "");
 
-        return view('categoriesmanager::admin.createOrUpdate',compact('device','Parentcategories'));
+        return view('categoriesmanager::admin.createOrUpdate',compact('device'));
     }
 
     /**
@@ -50,7 +48,7 @@ class CategoriesManagerController extends Controller
      * @return Response
      */
     public function store(CategoriesRequest $request)
-    {
+    {   
         $array = collect($request)->except('_token')->all();
         try{
 
@@ -71,7 +69,7 @@ class CategoriesManagerController extends Controller
         catch (\Illuminate\Database\QueryException $e) {
             return back()->withError($e->getMessage())->withInput();
         }
-        return redirect()->route('admin.categories.index')->with('success', 'Category has been saved Successfully');
+        return redirect()->route('admin.categories.index')->with('success', 'Manufacturer has been saved Successfully');
 
     }
 
@@ -92,11 +90,11 @@ class CategoriesManagerController extends Controller
     {
         $category = Categories::find($id);
 
-        $Parentcategories = Categories::orderBy('title', 'DESC')->pluck('title', 'id');
-        $Parentcategories->prepend('Select Parent Category', "");
+        $device = Device::orderBy('device_name', 'asc')->pluck('device_name', 'id', 'status');
+        $device->prepend('Select Device Type', "");
 
 
-       return view('categoriesmanager::admin.createOrUpdate', compact('category','Parentcategories'));
+       return view('categoriesmanager::admin.createOrUpdate', compact('category','device'));
     }
 
     /**

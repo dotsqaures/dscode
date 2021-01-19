@@ -23,9 +23,9 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>0</h3>
+              <h3>{{ count($Users)}}</h3>
 
-              <p>Total Users</p>
+              <p>Total Front Users</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -34,33 +34,29 @@
           </div>
         </div>
         <!-- ./col -->
-
-
         <div class="col-lg-3 col-xs-6">
-          <a href="{{ url('admin/Orders/histroy')}}" >
-                    <div class="small-box bg-green">
-                      <div class="inner">
-                        <h3>0</h3>
 
-                        <p>Today Orders</p>
-                      </div>
-                      <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                      </div>
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>{{ count($employee)}}</h3>
 
-                    </div>
-              </a>
-                  </div>
+              <p>Total Employee</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
 
+          </div>
+        </div>
 
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-aqua">
                   <div class="inner">
 
-                    <h3>0</h3>
+                    <h3>{{ count($order) }}</h3>
 
-                    <p>Total Product</p>
+                    <p>Total Sale</p>
                   </div>
                   <div class="icon">
                         <i class="ion ion-stats-bars"></i>
@@ -69,7 +65,21 @@
                 </div>
               </div>
 
+   <div class="col-lg-3 col-xs-6">
+<a href="{{ url('admin/Orders/histroy')}}" >
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>{{ count($todayRedem)}}</h3>
 
+              <p>Today Redeem Stamp</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+
+          </div>
+    </a>
+        </div>
 
 
 
