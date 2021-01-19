@@ -1,0 +1,53 @@
+@extends('frontend.layouts.app')
+
+@section('content')
+    <div class="row" style="margin-top: 50px;">
+
+        <div class="col-md-8 col-md-offset-2">
+
+            @if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            <div class="panel panel-default">
+                <div class="panel-heading admin-login-panel-heading">
+                    @include('frontend.includes.sitelogo')
+                </div>
+
+
+                <div class="panel-body">
+                    <div class="admin-logo-login-section">{{ trans('labels.frontend.passwords.reset_password_box_title') }}</div>
+                    {{ Form::open(['route' => 'frontend.auth.password.email', 'class' => 'form-horizontal', 'id' => 'reset-email-form']) }}
+
+                    <div class="form-group">
+                        {{ Form::label('email', trans('validation.attributes.frontend.register-user.email'), ['class' => 'col-md-4 control-label required']) }}
+                        <div class="col-md-6">
+                            {{ Form::input('email', 'email', null, ['class' => 'form-control', 'placeholder' => trans('validation.attributes.frontend.register-user.email')]) }}
+                        </div><!--col-md-6-->
+                    </div><!--form-group-->
+
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-4">
+                            {{ Form::submit(trans('labels.frontend.passwords.send_password_reset_link_button'), ['class' => 'btn btn-primary']) }}
+                            &nbsp;
+                            {{ link_to_route('admin.login', 'Go back to Login?') }}
+                        </div><!--col-md-6-->
+                    </div><!--form-group-->
+
+                    {{ Form::close() }}
+
+                </div><!-- panel body -->
+
+            </div><!-- panel -->
+
+        </div><!-- col-md-8 -->
+
+    </div><!-- row -->
+@endsection
+<style>
+.navbar-default{
+    display:none !important;
+}
+</style>

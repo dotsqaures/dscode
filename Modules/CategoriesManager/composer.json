@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/categoriesmanager",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\CategoriesManager\\Providers\\CategoriesManagerServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\CategoriesManager\\": ""
+        }
+    }
+}
